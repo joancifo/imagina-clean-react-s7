@@ -21,7 +21,7 @@ function setup(useCase: (command: Command) => Promise<Outcome>) {
 
 const COMMAND: Command = { orderId: 'P-1005', reason: 'El cliente llamó muy enfadado' };
 
-describe.skip('Parte A · traced', () => {
+describe('Parte A · traced', () => {
   it('devuelve EXACTAMENTE lo que devuelve el caso de uso', async () => {
     const outcome: Outcome = { ok: true, value: 'cancelado' };
     const { run } = setup(async () => outcome);

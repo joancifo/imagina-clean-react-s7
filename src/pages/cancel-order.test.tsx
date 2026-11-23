@@ -1,13 +1,12 @@
 // Ejercicio S3 · Partes A y C · Comportamiento visible de la regla de cancelación en las pantallas heredadas.
 // Se prueba lo que ve la persona usuaria (botones, textos, avisos), no cómo está escrito el código.
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import * as api from '../services/api';
 import { AppStoreProvider } from '../store/appStore';
 import { createInMemorySessionGateway, SessionProvider } from '../session';
 import type { Order, User } from '../shared/types';
 import OrderDetailPage from './OrderDetailPage';
-import DashboardPage from './DashboardPage';
 import { createInMemoryAdapters, createOrdersModule, OrdersProvider, toOrder } from '../orders';
 
 vi.mock('../services/api');
@@ -38,7 +37,6 @@ function renderAt(path: string, user: User) {
         <OrdersProvider module={createOrdersModule(createInMemoryAdapters(ORDERS.map(toOrder)))}>
           <Routes>
               <Route path="/orders/:id" element={<OrderDetailPage />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
           </Routes>
         </OrdersProvider>
       </AppStoreProvider>
@@ -78,8 +76,6 @@ describe('Parte C · una sola regla de cancelación en las tres pantallas', () =
     expect(await screen.findByRole('button', { name: 'Cancelar pedido' })).toBeInTheDocument();
   });
 
-  it('panel: un admin puede cancelar 4 pedidos (pendientes y aprobados, nunca cerrados)', async () => {
-    renderAt('/dashboard', ADMIN);
-    await waitFor(() => expect(screen.getByText('Cancelables por ti').querySelector('h2')?.textContent).toBe('4'));
-  });
+  // Sesión 7 · El test del panel se ha movido a dashboard.characterization.test.tsx («cancelables por ti: un admin…»),
+  // que lo comprueba contra la versión nueva. DashboardPage.tsx ya no existe.
 });

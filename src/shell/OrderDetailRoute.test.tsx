@@ -42,7 +42,7 @@ beforeEach(() => {
 });
 afterEach(() => vi.restoreAllMocks());
 
-describe.skip('Parte B · /orders/:id elige versión con el flag newOrderDetail', () => {
+describe('Parte B · /orders/:id elige versión con el flag newOrderDetail', () => {
   it('con el flag encendido se ve la versión nueva, que no usa src/services/api', async () => {
     renderDetail();
     expect(await screen.findByRole('heading', { name: 'Pedido P-1005 Pendiente' })).toBeInTheDocument();

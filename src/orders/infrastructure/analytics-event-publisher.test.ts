@@ -24,7 +24,7 @@ async function withSignedInBff(run: (fetchFn: typeof fetch, base: string) => Pro
 const CANCELLED = { type: 'OrderCancelled', orderId: 'P-1005', cancelledBy: 'u1', reason: 'Pedido duplicado en el ERP', occurredAt: '2026-11-23T18:00:00.000Z' } as unknown as OrderCancelled;
 const APPROVED: OrderApproved = { type: 'OrderApproved', orderId: 'P-1005', approvedBy: 'u1', total: 373.59, channel: 'web', hasNote: false, occurredAt: '2026-11-23T18:00:00.000Z' };
 
-describe.skip('Parte A · analítica contra el BFF', () => {
+describe('Parte A · analítica contra el BFF', () => {
   it('el BFF acepta el evento de aprobación', () =>
     withSignedInBff(async (fetchFn, base) => {
       await expect(createAnalyticsEventPublisher(fetchFn, base).publish(APPROVED)).resolves.toBeUndefined();

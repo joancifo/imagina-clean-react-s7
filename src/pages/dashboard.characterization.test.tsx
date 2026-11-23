@@ -1,10 +1,11 @@
 // Ejercicio S7 · Parte C · Tests de CARACTERIZACIÓN del panel.
-// «heredada» fija lo que hace src/pages/DashboardPage.tsx; «nueva», src/orders/ui/DashboardScreen.tsx.
+// «heredada» fijaba lo que hacía src/pages/DashboardPage.tsx; «nueva», src/orders/ui/DashboardScreen.tsx.
 // Dos diferencias A PROPÓSITO, escritas en el test: la facturación (bug del descuento) y lo que se ve mientras carga.
+// Solución: la versión heredada se ha BORRADO (y su bloque de aquí con ella). Las expectativas de «heredada»
+// se quedan en el archivo como documentación de qué cambió y por qué; ya no se ejecutan.
 import { screen, waitFor } from '@testing-library/react';
 import * as api from '../services/api';
 import { DashboardScreen } from '../orders';
-import DashboardPage from './DashboardPage';
 import { ADMIN, MANAGER, ORDERS, renderScreen, WithSessionAndToast } from './characterization-harness';
 import type { Actor } from '../orders';
 
@@ -14,7 +15,8 @@ type Version = 'heredada' | 'nueva';
 
 function open(version: Version, actor: Actor) {
   vi.mocked(api.getOrders).mockResolvedValue(ORDERS);
-  const element = version === 'heredada' ? <DashboardPage /> : <WithSessionAndToast>{({ actor: current }) => <DashboardScreen actor={current} />}</WithSessionAndToast>;
+  if (version === 'heredada') throw new Error('La versión heredada del panel ya no existe');
+  const element = <WithSessionAndToast>{({ actor: current }) => <DashboardScreen actor={current} />}</WithSessionAndToast>;
   return renderScreen({ path: '/dashboard', route: '/dashboard', actor, element, orders: ORDERS });
 }
 
@@ -61,5 +63,5 @@ function characterize(version: Version) {
 
 afterEach(() => vi.restoreAllMocks());
 
-describe('panel · versión heredada (la red)', () => characterize('heredada'));
-describe.skip('Parte C · panel · versión nueva', () => characterize('nueva'));
+// describe('panel · versión heredada (la red)', () => characterize('heredada'));  ← borrado con DashboardPage.tsx
+describe('Parte C · panel · versión nueva', () => characterize('nueva'));

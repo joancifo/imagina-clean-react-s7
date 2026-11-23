@@ -1,7 +1,7 @@
 // COMPOSICIÓN · Único lugar donde se eligen implementaciones concretas y se conectan con los casos de uso.
 // Sesión 4: ya no exporta instancias globales (singletons). Exporta FÁBRICAS: quien arranca la aplicación
 // (src/main.tsx) o un test decide qué adapters usar y crea el módulo una vez.
-import { createMemoryLogger, type Logger } from '../observability';
+import { createMemoryLogger, observePublisher, traced, type Logger } from '../observability';
 import { createApproveOrder, type ApproveOrder } from './application/approve-order';
 import { createCancelOrder, type CancelOrder } from './application/cancel-order';
 import { createLoadOrderDetail, type LoadOrderDetail } from './application/load-order-detail';
@@ -35,15 +35,17 @@ export type OrdersModule = {
 };
 
 /** Conecta casos de uso con adapters. Inyección manual (Pure DI): sin contenedor.
- *  Sesión 7: adapters.logger y adapters.newId ya llegan aquí, pero todavía nadie los usa (ejercicio · Parte A). */
-export function createOrdersModule({ reader, gateway, clock, events }: OrdersAdapters): OrdersModule {
+ *  Sesión 7: las operaciones con efecto se envuelven con traced() y los eventos con observePublisher(). */
+export function createOrdersModule({ reader, gateway, clock, events, logger, newId }: OrdersAdapters): OrdersModule {
+  const trace = { logger, clock, newId, feature: 'orders' };
+  const observedEvents = observePublisher(events, { logger, feature: 'orders' });
   return {
     loadOrderSummary: () => loadOrderSummary(reader),
     listUrgentOrders: () => listUrgentOrders(reader),
-    cancelOrder: createCancelOrder({ orders: gateway, clock, events }),
+    cancelOrder: traced('orders.cancel', createCancelOrder({ orders: gateway, clock, events: observedEvents }), trace),
     listOrders: () => reader.findAll(),
-    approveOrder: createApproveOrder({ orders: gateway, clock, events }),
-    loadOrderDetail: createLoadOrderDetail({ orders: gateway }),
+    approveOrder: traced('orders.approve', createApproveOrder({ orders: gateway, clock, events: observedEvents }), trace),
+    loadOrderDetail: traced('orders.load_detail', createLoadOrderDetail({ orders: gateway }), trace),
   };
 }
 

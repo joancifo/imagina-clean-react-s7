@@ -28,7 +28,7 @@ function sinkSpy() {
   };
 }
 
-describe.skip('Parte A · registrar', () => {
+describe('Parte A · registrar', () => {
   it('completa la entrada con la hora y deja fuera los campos que no están en la lista blanca', async () => {
     const spy = sinkSpy();
     const logger = createBufferedLogger({ sink: spy.sink, clock });
@@ -58,7 +58,7 @@ describe.skip('Parte A · registrar', () => {
   });
 });
 
-describe.skip('Parte A · enviar', () => {
+describe('Parte A · enviar', () => {
   it('flush sin nada pendiente no llama al destino', async () => {
     const spy = sinkSpy();
     await createBufferedLogger({ sink: spy.sink, clock }).flush();
@@ -91,7 +91,7 @@ describe.skip('Parte A · enviar', () => {
   });
 });
 
-describe.skip('Parte A · cuando el destino falla', () => {
+describe('Parte A · cuando el destino falla', () => {
   it('flush no rechaza y las entradas esperan al siguiente envío, en su orden', async () => {
     const spy = sinkSpy();
     const logger = createBufferedLogger({ sink: spy.sink, clock });

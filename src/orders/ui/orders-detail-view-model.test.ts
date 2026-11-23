@@ -12,7 +12,7 @@ const ADMIN: Actor = { id: 'u1', role: 'admin' };
 const AGENT: Actor = { id: 'u3', role: 'agent' };
 const plain = (value: string | null) => value?.replace(/\s+/g, ' ') ?? null;
 
-describe.skip('Parte B · buildOrderDetailViewModel', () => {
+describe('Parte B · buildOrderDetailViewModel', () => {
   it('título, estado y subtítulo con el nivel tal cual llega', () => {
     const view = buildOrderDetailViewModel(ORDER, ADMIN);
     expect(view.title).toBe('Pedido P-1001');

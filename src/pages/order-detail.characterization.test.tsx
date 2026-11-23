@@ -143,4 +143,4 @@ function characterize(version: Version) {
 afterEach(() => vi.restoreAllMocks());
 
 describe('detalle · versión heredada (la red)', () => characterize('heredada'));
-describe.skip('Parte B · detalle · versión nueva', () => characterize('nueva'));
+describe('Parte B · detalle · versión nueva', () => characterize('nueva'));

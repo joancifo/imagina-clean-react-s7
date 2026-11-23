@@ -15,7 +15,7 @@ function setup(patch: Partial<OrdersAdapters> = {}) {
   return { module: createOrdersModule(adapters), entries: (adapters.logger as MemoryLogger).entries };
 }
 
-describe.skip('Parte A · la feature Pedidos deja rastro', () => {
+describe('Parte A · la feature Pedidos deja rastro', () => {
   it('cancelar deja una entrada orders.cancel con el pedido y el resultado', async () => {
     const { module, entries } = setup();
     await module.cancelOrder({ orderId: 'P-1005', reason: 'Pedido duplicado en el ERP', actor: ADMIN });

@@ -7,7 +7,10 @@ import type { DomainEvent, EventPublisher } from '../application/ports';
 function toLog(event: DomainEvent): { name: string; payload: Record<string, unknown> } {
   switch (event.type) {
     case 'OrderCancelled':
-      return { name: 'order_cancelled', payload: { id: event.orderId, by: event.cancelledBy, reason: event.reason, at: event.occurredAt } };
+      // Sesión 7 · El motivo lo escribe una persona: no viaja. Además, el BFF lo rechazaba con 422 desde la Sesión 6
+      // y nadie lo vio, porque el caso de uso ignora (a propósito) los fallos de analítica. Lo destapó el log
+      // 'events.publish_failed'. El código del motivo, si algún día existe, iría en «code».
+      return { name: 'order_cancelled', payload: { id: event.orderId, by: event.cancelledBy, at: event.occurredAt } };
     case 'OrderApproved':
       // Sesión 6 · Se publica el CANAL y si hubo nota; nunca el texto de la nota ni el nombre del cliente.
       return { name: 'order_approved', payload: { id: event.orderId, by: event.approvedBy, total: event.total, code: event.channel, at: event.occurredAt } };

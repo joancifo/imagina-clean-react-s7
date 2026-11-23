@@ -22,7 +22,7 @@ function renderWith(patch: Partial<OrdersModule>, orderId: string) {
   return renderHook(({ id }) => useOrderDetail(id), { wrapper, initialProps: { id: orderId } });
 }
 
-describe.skip('Parte B · useOrderDetail', () => {
+describe('Parte B · useOrderDetail', () => {
   it('empieza cargando y pasa a listo con el pedido', async () => {
     const control = controllable();
     const { result } = renderWith({ loadOrderDetail: control.loadOrderDetail }, 'P-1');
